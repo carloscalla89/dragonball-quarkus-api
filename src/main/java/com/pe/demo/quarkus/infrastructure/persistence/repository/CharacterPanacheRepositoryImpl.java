@@ -28,6 +28,8 @@ public class CharacterPanacheRepositoryImpl implements CharacterRepository {
                     .name(entidadDb.getName())
                     .race(entidadDb.getRace())
                     .ki(parsearKi(entidadDb.getKi()+""))
+                    .maxKi(entidadDb.getMaxKi())
+                    .image(entidadDb.getImage())
                     .source("database")
                     .build();
         }
@@ -45,6 +47,7 @@ public class CharacterPanacheRepositoryImpl implements CharacterRepository {
     public void save(Character character) {
         CharacterJpaEntity entity = CharacterJpaEntity
                 .builder()
+                .id(character.getId())
                 .name(character.getName())
                 .race(character.getRace())
                 .ki(character.getKi())

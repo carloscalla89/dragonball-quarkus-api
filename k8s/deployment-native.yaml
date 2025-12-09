@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dragonball-quarkus-api-native
+  labels:
+    app: dragonball-quarkus-api-native
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dragonball-quarkus-api-native
+  template:
+    metadata:
+      labels:
+        app: dragonball-quarkus-api-native
+    spec:
+      containers:
+        - name: dragonball-quarkus-api-native
+          image: carlos89/dragonball-quarkus-api-native:latest # Asumiendo tag latest
+          # IMPORTANTE: IfNotPresent asegura que use la imagen cargada localmente
+          # en lugar de intentar descargarla de internet (y fallar).
+          imagePullPolicy: IfNotPresent
+            #env:
+            #- name: QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT
+            #value: "http://otel-collector-opentelemetry-collector.opentelemetry.svc.cluster.local:4317"
+            #- name: QUARKUS_APPLICATION_NAME
+          #value: "quarkus-camel-rest"
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "128Mi" # Las imágenes nativas consumen muy poca RAM
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dragonball-quarkus-api-native
+spec:
+  selector:
+    app: dragonball-quarkus-api-native
+  type: NodePort
+  ports:
+    - port: 80       # Puerto expuesto en el servicio
+      targetPort: 8080 # Puerto de tu contenedor Quarkus

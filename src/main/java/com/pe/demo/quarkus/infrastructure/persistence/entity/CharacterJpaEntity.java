@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 public class CharacterJpaEntity {
 
     @Id
-    @GeneratedValue
     private Long id;
     private String name;
     private String race;

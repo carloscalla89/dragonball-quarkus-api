@@ -3,6 +3,7 @@ package com.pe.demo.quarkus.infrastructure.api.controller;
 import com.pe.demo.quarkus.application.CharacterService;
 import com.pe.demo.quarkus.domain.Character;
 import com.pe.demo.quarkus.infrastructure.api.dto.DragonballResponse;
+import com.pe.demo.quarkus.infrastructure.api.dto.ErrorResponse;
 import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroRequest;
 import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroResponse;
 import jakarta.inject.Inject;
@@ -10,6 +11,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.Data;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -35,6 +39,9 @@ public class GuerreroController {
     // GET: Obtener por ID
     @GET
     @Path("/{id}")
+    @Timed(name = "timer_obtener_guerrero",
+            description = "Tiempo que toma buscar un guerrero (incluye llamada externa)",
+            unit = MetricUnits.MILLISECONDS)
     @Operation(summary = "Buscar guerrero por ID", description = "Consulta la API externa de Dragon Ball para obtener detalles.")
     @APIResponse(responseCode = "200", description = "Guerrero encontrado",
             content = @Content(mediaType = "application/json",
@@ -46,6 +53,9 @@ public class GuerreroController {
     }
 
     @GET
+    @Timed(name = "timer_obtener_guerreros",
+            description = "Tiempo que toma obtener todos los guerreros",
+            unit = MetricUnits.MILLISECONDS)
     @Operation(summary = "Obtener todos los guerreros paginados",
             description = "Consulta la API externa de Dragon Ball para obtener detalles.")
     @APIResponse(responseCode = "200", description = "Guerreros encontrados",
@@ -60,15 +70,24 @@ public class GuerreroController {
 
     // POST: Crear nuevo
     @POST
+    @Timed(name = "timer_crear_guerrero",
+            description = "Tiempo que toma crear guerreros",
+            unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "contador_guerreros_creados",
+            description = "Cantidad total de guerreros creados exitosamente")
     @Operation(summary = "Registrar nuevo guerrero", description = "Guarda un guerrero en la memoria local si cumple las validaciones.")
     @APIResponse(responseCode = "201", description = "Guerrero creado exitosamente")
     @APIResponse(responseCode = "400", description = "Datos inválidos (ej: nombre vacío o poder negativo)")
     public Response crearGuerrero(GuerreroRequest request) {
         // 1. Mapear Request DTO -> Entidad de Dominio
-        Character character = Character.builder()
+        Character character = Character
+                .builder()
+                .id(request.getId())
                 .name(request.getNombre())
                 .race(request.getRaza())
                 .ki(request.getNivelPoder())
+                .maxKi(request.getNivelMaxPoder()+"")
+                .image(request.getImagen())
                 .build();
 
         // 2. Ejecutar lógica de negocio
@@ -81,7 +100,13 @@ public class GuerreroController {
         } catch (IllegalArgumentException e) {
             // Manejo de errores de negocio (ej: reglas del dominio fallaron)
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorResponse(e.getMessage()))
+                    .entity(ErrorResponse
+                            .builder()
+                            .tipo("Regla de Negocio")
+                            .mensaje(e.getMessage())
+                            .status(Response.Status.BAD_REQUEST.getStatusCode())
+                            .build()
+                    )
                     .build();
         }
     }
@@ -97,9 +122,4 @@ public class GuerreroController {
         return Response.noContent().build();
     }
 
-    // Clase interna para errores simples (o usa un DTO global)
-    @Data
-    public static class ErrorResponse {
-        private final String mensaje;
-    }
 }

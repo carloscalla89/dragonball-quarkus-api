@@ -4,13 +4,17 @@ import com.pe.demo.quarkus.domain.Character;
 import com.pe.demo.quarkus.domain.CharacterRepository;
 import com.pe.demo.quarkus.infrastructure.api.dto.DragonballResponse;
 import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroResponse;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ApplicationScoped
 public class CharacterService {
 
@@ -28,7 +32,7 @@ public class CharacterService {
 
         Character character = Optional
                 .ofNullable(panacheRepository.searchById(id))
-                .orElse(processWhenCharacterIsEmpty(id));
+                .orElseGet(() ->processWhenCharacterIsEmpty(id));
 
         GuerreroResponse dto = GuerreroResponse.builder()
                 .id(character.getId())
@@ -37,10 +41,10 @@ public class CharacterService {
                 .ki(character.getKi()+"")
                 .kiMax(character.getMaxKi())
                 .imagen(character.getImage())
+                .origen(character.getSource())
                 .build();
 
         DragonballResponse<GuerreroResponse> response = new DragonballResponse<>();
-        response.setOrigen(dto.getOrigen());
         response.setData(dto);
 
         return response;
@@ -65,7 +69,6 @@ public class CharacterService {
         responseWrapper.setPaginaActual(page);
         responseWrapper.setTotalElementosPorPagina(limit);
         responseWrapper.setTotalElementos(listaDto.size());
-        responseWrapper.setOrigen("database");
 
         return responseWrapper;
     }
@@ -74,11 +77,25 @@ public class CharacterService {
         if ("Humano".equals(character.getRace()) && character.isPowerful()) {
             throw new IllegalArgumentException("Un humano no puede tener tanto poder (regla de negocio)");
         }
-        panacheRepository.save(character);
+
+        if (panacheRepository.searchById(character.getId()) == null) {
+            log.info("saving");
+            panacheRepository.save(character);
+        }
+
     }
 
     public void expulsarGuerrero(String nombre) {
         panacheRepository.delete(nombre);
+    }
+
+    public Uni<DragonballResponse<GuerreroResponse>> obtenerInfoGuerreroReactivo(Long id) {
+        // Uni.createFrom().item(...) crea el flujo
+        return Uni.createFrom().item(() -> {
+                    // Quarkus ejecutará esto en un hilo "Worker" seguro.
+                    return this.obtenerInfoGuerrero(id);
+                })
+                .runSubscriptionOn(Infrastructure.getDefaultWorkerPool()); // Forzamos que corra en hilo seguro
     }
 
     private Character processWhenCharacterIsEmpty(Long id) {

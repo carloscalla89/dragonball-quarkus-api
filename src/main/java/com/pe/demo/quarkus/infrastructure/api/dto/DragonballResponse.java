@@ -19,6 +19,5 @@ public class DragonballResponse<T> {
     private Integer paginaActual;
     private Integer totalElementos;
     private Integer totalElementosPorPagina;
-    private String origen;
 
 }
