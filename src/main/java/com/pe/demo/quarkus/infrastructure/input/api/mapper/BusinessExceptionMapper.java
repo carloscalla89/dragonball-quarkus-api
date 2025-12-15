@@ -1,7 +1,7 @@
-package com.pe.demo.quarkus.infrastructure.api.mapper;
+package com.pe.demo.quarkus.infrastructure.input.api.mapper;
 
 import com.pe.demo.quarkus.domain.exception.BusinessException;
-import com.pe.demo.quarkus.infrastructure.api.dto.ErrorResponse;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.ErrorResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;

@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.infrastructure.health;
+package com.pe.demo.quarkus.infrastructure.input.api.health;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.HealthCheck;
@@ -11,6 +11,7 @@ public class SimpleLivenessCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        return HealthCheckResponse.up("DragonBall API Liveness");
+        return HealthCheckResponse.up("DragonBall Quarkus API Liveness");
     }
+
 }

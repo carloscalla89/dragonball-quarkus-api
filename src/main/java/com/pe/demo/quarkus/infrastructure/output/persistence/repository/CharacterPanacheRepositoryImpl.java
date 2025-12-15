@@ -1,9 +1,8 @@
-package com.pe.demo.quarkus.infrastructure.persistence.repository;
+package com.pe.demo.quarkus.infrastructure.output.persistence.repository;
 
-import com.pe.demo.quarkus.domain.Character;
-import com.pe.demo.quarkus.domain.CharacterRepository;
-import com.pe.demo.quarkus.domain.CharacterResponse;
-import com.pe.demo.quarkus.infrastructure.persistence.entity.CharacterJpaEntity;
+import com.pe.demo.quarkus.domain.model.Character;
+import com.pe.demo.quarkus.domain.model.CharacterRepository;
+import com.pe.demo.quarkus.infrastructure.output.persistence.entity.CharacterJpaEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -30,6 +29,7 @@ public class CharacterPanacheRepositoryImpl implements CharacterRepository {
                     .ki(parsearKi(entidadDb.getKi()+""))
                     .maxKi(entidadDb.getMaxKi())
                     .image(entidadDb.getImage())
+                    .affiliation(entidadDb.getAffiliation())
                     .source("database")
                     .build();
         }
@@ -53,6 +53,7 @@ public class CharacterPanacheRepositoryImpl implements CharacterRepository {
                 .ki(character.getKi())
                 .maxKi(character.getMaxKi())
                 .image(character.getImage())
+                .affiliation(character.getAffiliation())
                 .build();
 
         dbRepository.persist(entity);

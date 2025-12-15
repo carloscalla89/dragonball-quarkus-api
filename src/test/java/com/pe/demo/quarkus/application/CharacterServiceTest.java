@@ -1,9 +1,9 @@
 package com.pe.demo.quarkus.application;
 
-import com.pe.demo.quarkus.domain.Character;
-import com.pe.demo.quarkus.domain.CharacterRepository;
-import com.pe.demo.quarkus.infrastructure.api.dto.DragonballResponse;
-import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroResponse;
+import com.pe.demo.quarkus.domain.model.Character;
+import com.pe.demo.quarkus.domain.model.CharacterRepository;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.DragonballResponse;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroResponse;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

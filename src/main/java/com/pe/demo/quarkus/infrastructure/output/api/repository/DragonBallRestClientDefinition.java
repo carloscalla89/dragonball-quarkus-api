@@ -1,7 +1,7 @@
-package com.pe.demo.quarkus.infrastructure.persistence.repository;
+package com.pe.demo.quarkus.infrastructure.output.api.repository;
 
-import com.pe.demo.quarkus.infrastructure.persistence.dto.DragonBallCharacterResponse;
-import com.pe.demo.quarkus.infrastructure.persistence.dto.DragonBallPageResponse;
+import com.pe.demo.quarkus.infrastructure.output.api.dto.DragonBallCharacterResponse;
+import com.pe.demo.quarkus.infrastructure.output.api.dto.DragonBallPageResponse;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 

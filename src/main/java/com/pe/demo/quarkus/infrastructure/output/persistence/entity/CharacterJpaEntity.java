@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.infrastructure.persistence.entity;
+package com.pe.demo.quarkus.infrastructure.output.persistence.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,5 +24,6 @@ public class CharacterJpaEntity {
     private int ki;
     private String maxKi;
     private String image;
+    private String affiliation;
 
 }

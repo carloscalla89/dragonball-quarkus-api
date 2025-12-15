@@ -1,9 +1,9 @@
 package com.pe.demo.quarkus.application;
 
-import com.pe.demo.quarkus.domain.Character;
-import com.pe.demo.quarkus.domain.CharacterRepository;
-import com.pe.demo.quarkus.infrastructure.api.dto.DragonballResponse;
-import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroResponse;
+import com.pe.demo.quarkus.domain.model.Character;
+import com.pe.demo.quarkus.domain.model.CharacterRepository;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.DragonballResponse;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroResponse;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,6 +42,7 @@ public class CharacterService {
                 .kiMax(character.getMaxKi())
                 .imagen(character.getImage())
                 .origen(character.getSource())
+                .equipo(character.getAffiliation())
                 .build();
 
         DragonballResponse<GuerreroResponse> response = new DragonballResponse<>();

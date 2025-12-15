@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.infrastructure.api.dto;
+package com.pe.demo.quarkus.infrastructure.input.api.dto;
 
 import lombok.Builder;
 import lombok.Data;

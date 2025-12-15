@@ -1,12 +1,11 @@
-package com.pe.demo.quarkus.infrastructure.persistence.repository;
+package com.pe.demo.quarkus.infrastructure.output.api.repository;
 
 import com.pe.demo.quarkus.cross.OutgoingRequestFilter;
 import com.pe.demo.quarkus.cross.OutgoingResponseFilter;
-import com.pe.demo.quarkus.domain.Character;
-import com.pe.demo.quarkus.domain.CharacterRepository;
-import com.pe.demo.quarkus.domain.CharacterResponse;
-import com.pe.demo.quarkus.infrastructure.persistence.dto.DragonBallCharacterResponse;
-import com.pe.demo.quarkus.infrastructure.persistence.dto.DragonBallPageResponse;
+import com.pe.demo.quarkus.domain.model.Character;
+import com.pe.demo.quarkus.domain.model.CharacterRepository;
+import com.pe.demo.quarkus.infrastructure.output.api.dto.DragonBallCharacterResponse;
+import com.pe.demo.quarkus.infrastructure.output.api.dto.DragonBallPageResponse;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
@@ -14,7 +13,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -56,6 +54,7 @@ public class CharacterRestClientRepositoryImpl implements CharacterRepository {
                 .ki(parsearKi(dto.getKi()))
                 .maxKi(dto.getMaxKi())
                 .image(dto.getImage())
+                .affiliation(dto.getAffiliation())
                 .source("api-rest")
                 .build();
     }

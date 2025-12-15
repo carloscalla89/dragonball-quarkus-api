@@ -1,16 +1,15 @@
-package com.pe.demo.quarkus.infrastructure.api.controller;
+package com.pe.demo.quarkus.infrastructure.input.api.controller;
 
 import com.pe.demo.quarkus.application.CharacterService;
-import com.pe.demo.quarkus.domain.Character;
-import com.pe.demo.quarkus.infrastructure.api.dto.DragonballResponse;
-import com.pe.demo.quarkus.infrastructure.api.dto.ErrorResponse;
-import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroRequest;
-import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroResponse;
+import com.pe.demo.quarkus.domain.model.Character;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.DragonballResponse;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.ErrorResponse;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroRequest;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import lombok.Data;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;

@@ -1,26 +1,19 @@
-package com.pe.demo.quarkus.infrastructure.api.controller;
+package com.pe.demo.quarkus.infrastructure.input.api.controller;
 
 import com.pe.demo.quarkus.application.CharacterService;
-import com.pe.demo.quarkus.domain.Character;
-import com.pe.demo.quarkus.infrastructure.api.dto.DragonballResponse;
-import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroRequest;
-import com.pe.demo.quarkus.infrastructure.api.dto.GuerreroResponse;
+import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import lombok.Data;
 import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-
-import java.net.URI;
 
 @Path("/api/v1/guerreros/reactive")
 @Produces(MediaType.APPLICATION_JSON)

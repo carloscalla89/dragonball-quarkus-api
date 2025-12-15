@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.infrastructure.api.dto;
+package com.pe.demo.quarkus.infrastructure.input.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

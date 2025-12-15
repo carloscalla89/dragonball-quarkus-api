@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.infrastructure.persistence.dto;
+package com.pe.demo.quarkus.infrastructure.output.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

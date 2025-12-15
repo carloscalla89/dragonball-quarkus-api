@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.domain;
+package com.pe.demo.quarkus.domain.model;
 
 import java.util.List;
 

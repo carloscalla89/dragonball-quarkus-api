@@ -1,13 +1,11 @@
-package com.pe.demo.quarkus.infrastructure.health;
+package com.pe.demo.quarkus.infrastructure.output.api.health;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
