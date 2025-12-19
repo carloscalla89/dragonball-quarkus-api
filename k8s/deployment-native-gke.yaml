@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dragonball-quarkus-api-native-gke
+  labels:
+    app: dragonball-quarkus-api-native-gke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dragonball-quarkus-api-native-gke
+  template:
+    metadata:
+      labels:
+        app: dragonball-quarkus-api-native-gke
+    spec:
+      containers:
+        - name: dragonball-quarkus-api-native-gke
+          image: ${IMAGE_NAME} # Esto se reemplazará en el pipeline
+            #env:
+            #- name: QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT
+            #value: "http://otel-collector-opentelemetry-collector.opentelemetry.svc.cluster.local:4317"
+            #- name: QUARKUS_APPLICATION_NAME
+          #value: "quarkus-camel-rest"
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "128Mi" # Las imágenes nativas consumen muy poca RAM
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dragonball-quarkus-api-native-gke
+spec:
+  selector:
+    app: dragonball-quarkus-api-native-gke
+  type: LoadBalancer
+  ports:
+    - port: 80       # Puerto expuesto en el servicio
+      targetPort: 8080 # Puerto de tu contenedor Quarkus

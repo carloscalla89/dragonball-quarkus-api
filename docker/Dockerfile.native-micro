@@ -22,5 +22,5 @@ COPY --from=build /code/target/*-runner /work/application
 
 # Permisos y ejecución
 RUN chmod 775 /work
-EXPOSE 8081
+EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
