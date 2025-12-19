@@ -27,6 +27,15 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
+      # NUEVO PASO: Crear el repo si no existe
+      - name: Create Artifact Registry Repository
+        run: |-
+          gcloud artifacts repositories create ${{ env.REPOSITORY }} \
+            --repository-format=docker \
+            --location=${{ env.GAR_LOCATION }} \
+            --description="Docker repository created by GitHub Actions" \
+            --quiet || echo "El repositorio ya existe o no se pudo crear (verificar permisos), continuando..."          
+
       # 2. Configurar Docker para Artifact Registry
       - name: Docker configuration
         run: |-
