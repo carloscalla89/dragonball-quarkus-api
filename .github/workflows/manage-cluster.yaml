@@ -1,0 +1,80 @@
+name: Manage Cluster (Start/Stop)
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: '¿Qué quieres hacer?'
+        required: true
+        default: 'stop'
+        type: choice
+        options:
+          - stop
+          - start
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GKE_CLUSTER: autopilot-cluster-1 # Tu nombre de cluster
+  GKE_ZONE: us-central1            # Tu zona
+  DEPLOYMENT_NAME_NATIVE: dragonball-quarkus-api-native-gke
+  SERVICE_NAME_NATIVE: dragonball-quarkus-api-native-gke
+  DEPLOYMENT_NAME_JVM: dragonball-quarkus-api-jvm-gke
+  SERVICE_NAME_JVM: dragonball-quarkus-api-jvm-gke
+
+jobs:
+  manage-cluster:
+    name: Manage GKE Resources
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. Autenticación (Igual que tu deploy)
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # 2. Conectar a GKE
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+
+      # 3. ACCIÓN: APAGAR (STOP)
+      # Escala a 0 réplicas y borra el LoadBalancer para ahorrar dinero
+      - name: Stop Cluster (Scale 0 & Delete LB)
+        if: ${{ github.event.inputs.action == 'stop' }}
+        run: |-
+          echo "Apagando el servicio..."
+          kubectl scale deployment ${{ env.DEPLOYMENT_NAME_NATIVE }} --replicas=0
+          kubectl scale deployment ${{ env.DEPLOYMENT_NAME_JVM }} --replicas=0
+          
+          # Borramos el servicio para que no cobren la IP pública ($18/mes)
+          # Usamos 'ignore-not-found' por si ya estaba borrado
+          kubectl delete service ${{ env.SERVICE_NAME_NATIVE }} --ignore-not-found=true
+          kubectl delete service ${{ env.SERVICE_NAME_JVM }} --ignore-not-found=true
+          
+          echo "✅ Sistema hibernado: 0 costos de cómputo, 0 costos de red."
+
+      # 4. ACCIÓN: ENCENDER (START)
+      # Escala a 1 réplica y restaura el LoadBalancer
+      - name: Start Cluster (Scale 1 & Restore LB)
+        if: ${{ github.event.inputs.action == 'start' }}
+        run: |-
+          echo "Encendiendo el servicio..."
+          
+          # 1. Restaurar el Service (LoadBalancer)
+          # Aplicamos solo la parte del Service del archivo yaml original
+          # Nota: Asume que tienes el archivo k8s/deployment.yaml en tu repo
+          kubectl apply -f k8s/deployment.yaml 
+          
+          # 2. Escalar los pods
+          kubectl scale deployment ${{ env.DEPLOYMENT_NAME }} --replicas=1
+          
+          echo "⏳ Esperando a que la IP pública sea asignada..."
+          sleep 10
+          kubectl get service ${{ env.SERVICE_NAME }}
+          echo "✅ Sistema encendido."
