@@ -36,3 +36,4 @@ docker build -f .\docker\Dockerfile.native-micro -t carlos89/dragonball-quarkus-
 
 
 # hola mundo - 
+# hola mundo - imagen jvm

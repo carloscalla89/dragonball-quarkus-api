@@ -9,15 +9,15 @@ env:
   GAR_LOCATION: us-central1 # Cambia esto a tu región
   REPOSITORY: dragonball-quarkus-api-repo
   # dragonball-quarkus-api-native-gke: imagen nativa con mandrel, dragonball-quarkus-api-jvm-gke: imagen JVM
-  IMAGE: dragonball-quarkus-api-native-gke
+  IMAGE: dragonball-quarkus-api-jvm-gke
   GKE_CLUSTER: autopilot-cluster-1
   GKE_ZONE: us-central1 # Cambia esto (zona o región del cluster)
   # Dockerfile.native-micro: dockerfile con imagen nativa, Dockerfile.jvm: dockerfile con jvm
-  DOCKERFILE: Dockerfile.native-micro
+  DOCKERFILE: Dockerfile.jvm
   # deployment-native-gke.yaml, deployment-jvm-gke.yaml
-  DEPLOYMENT_MANIFEST: deployment-native-gke.yaml
+  DEPLOYMENT_MANIFEST: deployment-jvm-gke.yaml
   # dragonball-quarkus-api-native-gke, dragonball-quarkus-api-jvm-gke
-  DEPLOYMENT_NAME: dragonball-quarkus-api-native-gke
+  DEPLOYMENT_NAME: dragonball-quarkus-api-jvm-gke
 
 jobs:
   build-publish-deploy:
