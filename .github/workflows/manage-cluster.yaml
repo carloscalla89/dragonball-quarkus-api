@@ -58,23 +58,3 @@ jobs:
           kubectl delete service ${{ env.SERVICE_NAME_JVM }} --ignore-not-found=true
           
           echo "✅ Sistema hibernado: 0 costos de cómputo, 0 costos de red."
-
-      # 4. ACCIÓN: ENCENDER (START)
-      # Escala a 1 réplica y restaura el LoadBalancer
-      - name: Start Cluster (Scale 1 & Restore LB)
-        if: ${{ github.event.inputs.action == 'start' }}
-        run: |-
-          echo "Encendiendo el servicio..."
-          
-          # 1. Restaurar el Service (LoadBalancer)
-          # Aplicamos solo la parte del Service del archivo yaml original
-          # Nota: Asume que tienes el archivo k8s/deployment.yaml en tu repo
-          kubectl apply -f k8s/deployment.yaml 
-          
-          # 2. Escalar los pods
-          kubectl scale deployment ${{ env.DEPLOYMENT_NAME }} --replicas=1
-          
-          echo "⏳ Esperando a que la IP pública sea asignada..."
-          sleep 10
-          kubectl get service ${{ env.SERVICE_NAME }}
-          echo "✅ Sistema encendido."
