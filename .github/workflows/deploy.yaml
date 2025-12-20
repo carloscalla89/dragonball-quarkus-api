@@ -8,13 +8,16 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GAR_LOCATION: us-central1 # Cambia esto a tu región
   REPOSITORY: dragonball-quarkus-api-repo
-  #dragonball-quarkus-api-native-gke: imagen nativa con mandrel, dragonball-quarkus-api-jvm-gke: imagen JVM
-  IMAGE: dragonball-quarkus-api-jvm-gke
+  # dragonball-quarkus-api-native-gke: imagen nativa con mandrel, dragonball-quarkus-api-jvm-gke: imagen JVM
+  IMAGE: dragonball-quarkus-api-native-gke
   GKE_CLUSTER: autopilot-cluster-1
   GKE_ZONE: us-central1 # Cambia esto (zona o región del cluster)
-  DOCKERFILE: Dockerfile.jvm
-  DEPLOYMENT_MANIFEST: deployment-jvm-gke.yaml
-  DEPLOYMENT_NAME: dragonball-quarkus-api-jvm-gke
+  # Dockerfile.native-micro: dockerfile con imagen nativa, Dockerfile.jvm: dockerfile con jvm
+  DOCKERFILE: Dockerfile.native-micro
+  # deployment-native-gke.yaml, deployment-jvm-gke.yaml
+  DEPLOYMENT_MANIFEST: deployment-native-gke.yaml
+  # dragonball-quarkus-api-native-gke, dragonball-quarkus-api-jvm-gke
+  DEPLOYMENT_NAME: dragonball-quarkus-api-native-gke
 
 jobs:
   build-publish-deploy:
