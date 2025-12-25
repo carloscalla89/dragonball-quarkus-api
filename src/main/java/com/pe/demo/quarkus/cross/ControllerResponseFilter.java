@@ -1,5 +1,6 @@
 package com.pe.demo.quarkus.cross;
 
+import io.opentelemetry.api.trace.Span;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;
@@ -20,14 +21,13 @@ public class ControllerResponseFilter implements ContainerResponseFilter {
 
         // 2. Obtener el estado y el contenido del Response generado por el Controller
         int status = containerResponseContext.getStatus();
-        Object entity = containerResponseContext.getEntity();
-
         // a) Agregar un Header de metadatos o seguridad
         containerResponseContext.getHeaders().add("X-Server-Processed", "true");
         containerResponseContext.getHeaders().add("X-Request-Path",
                 containerRequestContext.getUriInfo().getPath());
+        containerResponseContext.getHeaders().add("x-trace-id", Span.current().getSpanContext().getTraceId());
 
-        log.info("[END] - response end: status:{}, entity:{}", status, entity);
+        log.info("[END] - response end: status:{}", status);
 
     }
 }

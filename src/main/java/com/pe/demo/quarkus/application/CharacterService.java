@@ -80,7 +80,7 @@ public class CharacterService {
         }
 
         if (panacheRepository.searchById(character.getId()) == null) {
-            log.info("saving");
+
             panacheRepository.save(character);
         }
 

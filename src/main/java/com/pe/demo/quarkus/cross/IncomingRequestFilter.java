@@ -1,5 +1,6 @@
 package com.pe.demo.quarkus.cross;
 
+import io.opentelemetry.api.trace.Span;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
@@ -15,10 +16,17 @@ public class IncomingRequestFilter implements ContainerRequestFilter {
         String method = containerRequestContext.getMethod();
         String path = containerRequestContext.getUriInfo().getAbsolutePath().toString();
 
-        // 2. Puedes leer headers
+        // para leer headers
         String correlationId = containerRequestContext.getHeaderString("X-Correlation-ID");
 
-        log.info("[START] - request init: method:{}, path:{}", method, path);
+        // 1. Obtener el Span actual (puede ser el que creó Quarkus automáticamente al recibir la petición HTTP)
+        Span currentSpan = Span.current();
+
+        // 2. Extraer el Trace ID
+        String traceId = currentSpan.getSpanContext().getTraceId();
+        String spanId = currentSpan.getSpanContext().getSpanId();
+
+        log.info("[START] - request init: traceId:{}, spanId:{}, method:{}, path:{}", traceId, spanId, method, path);
 
     }
 }

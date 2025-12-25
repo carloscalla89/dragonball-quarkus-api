@@ -2,13 +2,12 @@ package com.pe.demo.quarkus.infrastructure.input.api.controller;
 
 import com.pe.demo.quarkus.application.CharacterService;
 import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroResponse;
+import io.micrometer.core.annotation.Timed;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -32,9 +31,9 @@ public class GuerreroReactiveController {
     // GET: Obtener por ID
     @GET
     @Path("/{id}")
-    @Timed(name = "timer_obtener_guerrero_reactive",
+    @Timed(value = "timer_obtener_guerrero_reactive",
             description = "Tiempo que toma buscar un guerrero (incluye llamada externa)",
-            unit = MetricUnits.MILLISECONDS)
+            histogram = true)
     @Operation(summary = "Buscar guerrero por ID", description = "Consulta la API externa de Dragon Ball para obtener detalles.")
     @APIResponse(responseCode = "200", description = "Guerrero encontrado",
             content = @Content(mediaType = "application/json",

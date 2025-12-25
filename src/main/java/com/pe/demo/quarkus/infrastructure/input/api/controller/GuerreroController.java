@@ -6,13 +6,13 @@ import com.pe.demo.quarkus.infrastructure.input.api.dto.DragonballResponse;
 import com.pe.demo.quarkus.infrastructure.input.api.dto.ErrorResponse;
 import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroRequest;
 import com.pe.demo.quarkus.infrastructure.input.api.dto.GuerreroResponse;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Timed;
+
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -38,9 +38,9 @@ public class GuerreroController {
     // GET: Obtener por ID
     @GET
     @Path("/{id}")
-    @Timed(name = "timer_obtener_guerrero",
+    @Timed(value = "timer_obtener_guerrero",
             description = "Tiempo que toma buscar un guerrero (incluye llamada externa)",
-            unit = MetricUnits.MILLISECONDS)
+            histogram = true)
     @Operation(summary = "Buscar guerrero por ID", description = "Consulta la API externa de Dragon Ball para obtener detalles.")
     @APIResponse(responseCode = "200", description = "Guerrero encontrado",
             content = @Content(mediaType = "application/json",
@@ -52,9 +52,9 @@ public class GuerreroController {
     }
 
     @GET
-    @Timed(name = "timer_obtener_guerreros",
+    @Timed(value = "timer_obtener_guerreros",
             description = "Tiempo que toma obtener todos los guerreros",
-            unit = MetricUnits.MILLISECONDS)
+            histogram = true)
     @Operation(summary = "Obtener todos los guerreros paginados",
             description = "Consulta la API externa de Dragon Ball para obtener detalles.")
     @APIResponse(responseCode = "200", description = "Guerreros encontrados",
@@ -69,10 +69,10 @@ public class GuerreroController {
 
     // POST: Crear nuevo
     @POST
-    @Timed(name = "timer_crear_guerrero",
+    @Timed(value = "timer_crear_guerrero",
             description = "Tiempo que toma crear guerreros",
-            unit = MetricUnits.MILLISECONDS)
-    @Counted(name = "contador_guerreros_creados",
+            histogram = true)
+    @Counted(value = "contador_guerreros_creados",
             description = "Cantidad total de guerreros creados exitosamente")
     @Operation(summary = "Registrar nuevo guerrero", description = "Guarda un guerrero en la memoria local si cumple las validaciones.")
     @APIResponse(responseCode = "201", description = "Guerrero creado exitosamente")

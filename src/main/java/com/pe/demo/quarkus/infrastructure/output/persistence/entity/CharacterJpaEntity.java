@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "characters")
+@Table(name = "z_characters")
 @Data // Lombok para getters/setters
 @NoArgsConstructor
 @AllArgsConstructor
