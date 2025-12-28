@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # 1. Variables de configuración
-APP_NAME="dragonball-quarkus-api-jvm"
-IMAGE_NAME="carlos89/dragonball-quarkus-api-jvm" # O el nombre que uses
+APP_NAME="dragonball-quarkus-api-native"
+IMAGE_NAME="carlos89/dragonball-quarkus-api-native" # O el nombre que uses
 TAG="latest"
-DOCKERFILE="docker/Dockerfile.jvm" #
-DEPLOYMENT="k8s/deployment-jvm-minikube.yaml"
+DOCKERFILE="docker/Dockerfile.native-micro" # O Dockerfile.native-micro si usas nativo
+DEPLOYMENT="k8s/deployment-native-minikube.yaml"
 ELK_NS="elk" # Namespace donde vive tu ELK
 
 # Colores
@@ -37,7 +37,7 @@ eval $(minikube -p minikube docker-env)
 # 3. Borrar el Deployment anterior
 echo -e "${GREEN}3. Eliminando deployment anterior...${NC}"
 # --ignore-not-found evita que el script falle si es la primera vez que despliegas
-kubectl delete deployment $APP_NAME --force --ignore-not-found=true
+kubectl delete deployment $APP_NAME --ignore-not-found=true
 
 
 # 4. Borrar la imagen vieja (Limpieza)

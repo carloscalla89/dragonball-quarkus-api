@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         app: dragonball-quarkus-api-native
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/q/metrics"
+        prometheus.io/port: "8080"
     spec:
       containers:
         - name: dragonball-quarkus-api-native
@@ -36,15 +40,31 @@ spec:
             limits:
               memory: "128Mi" # Las imágenes nativas consumen muy poca RAM
               cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /q/health/live
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 15
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: dragonball-quarkus-api-native
+  labels:
+    app: dragonball-quarkus-api-native
 spec:
   selector:
     app: dragonball-quarkus-api-native
   type: NodePort
   ports:
-    - port: 80       # Puerto expuesto en el servicio
+    - name: http-api
+      port: 80       # Puerto expuesto en el servicio
       targetPort: 8080 # Puerto de tu contenedor Quarkus

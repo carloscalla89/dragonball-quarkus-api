@@ -96,6 +96,12 @@
             <artifactId>quarkus-smallrye-health</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- quarkus-smallrye-metrics:
         Es la implementación del estándar antiguo (MicroProfile Metrics) -->
         <!--
