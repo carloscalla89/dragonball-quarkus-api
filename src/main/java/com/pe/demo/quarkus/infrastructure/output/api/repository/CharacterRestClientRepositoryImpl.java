@@ -1,7 +1,7 @@
 package com.pe.demo.quarkus.infrastructure.output.api.repository;
 
-import com.pe.demo.quarkus.cross.OutgoingRequestFilter;
-import com.pe.demo.quarkus.cross.OutgoingResponseFilter;
+import com.pe.demo.quarkus.infrastructure.filter.OutgoingRequestFilter;
+import com.pe.demo.quarkus.infrastructure.filter.OutgoingResponseFilter;
 import com.pe.demo.quarkus.domain.model.Character;
 import com.pe.demo.quarkus.domain.model.CharacterRepository;
 import com.pe.demo.quarkus.infrastructure.output.api.dto.DragonBallCharacterResponse;

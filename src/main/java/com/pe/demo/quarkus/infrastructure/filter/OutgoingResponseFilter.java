@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.cross;
+package com.pe.demo.quarkus.infrastructure.filter;
 
 import com.pe.demo.quarkus.domain.exception.BusinessException;
 import jakarta.ws.rs.client.ClientRequestContext;

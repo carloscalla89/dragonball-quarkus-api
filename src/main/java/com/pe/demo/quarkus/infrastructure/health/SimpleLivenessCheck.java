@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.infrastructure.input.api.health;
+package com.pe.demo.quarkus.infrastructure.health;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.HealthCheck;

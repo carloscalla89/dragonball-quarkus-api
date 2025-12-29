@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.cross;
+package com.pe.demo.quarkus.infrastructure.filter;
 
 import jakarta.ws.rs.client.ClientRequestContext;
 import jakarta.ws.rs.client.ClientRequestFilter;

@@ -1,8 +1,7 @@
-package com.pe.demo.quarkus.infrastructure.output.api.health;
+package com.pe.demo.quarkus.infrastructure.health;
 
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Tags;
 import io.quarkus.logging.Log;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;

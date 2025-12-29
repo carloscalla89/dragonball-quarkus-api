@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # 1. Variables de configuración
-APP_NAME="dragonball-quarkus-api-native"
-IMAGE_NAME="carlos89/dragonball-quarkus-api-native" # O el nombre que uses
-TAG="latest"
+export APP_NAME="dragonball-quarkus-api-native"
+export IMAGE_NAME="carlos89/${APP_NAME}" # O el nombre que uses
+export TAG="latest"
 DOCKERFILE="docker/Dockerfile.native-micro" # O Dockerfile.native-micro si usas nativo
 DEPLOYMENT="k8s/deployment-native-minikube.yaml"
 ELK_NS="elk" # Namespace donde vive tu ELK
@@ -51,11 +51,11 @@ echo -e "${GREEN}--- Cargando imagen local a Minikube ---${NC}"
 minikube image load $IMAGE_NAME:$TAG
 
 
-# 6. Aplicar cambios en Kubernetes
+# 5. Aplicar cambios en Kubernetes
 echo -e "${GREEN}5. Desplegando en Kubernetes...${NC}"
-kubectl apply -f $DEPLOYMENT
+envsubst < $DEPLOYMENT | kubectl apply -f -
 
-# 7. Forzar reinicio para que tome la nueva imagen (Por seguridad)
+# 6. Forzar reinicio para que tome la nueva imagen (Por seguridad)
 kubectl rollout restart deployment $APP_NAME
 
 echo -e "${GREEN}--- ¡Despliegue completado! ---${NC}"

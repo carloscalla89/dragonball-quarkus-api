@@ -1,26 +1,39 @@
-# ETAPA 1: Builder (Usando Mandrel)
-# Usamos la imagen oficial de Quarkus con Mandrel y Maven preinstalado
+# ETAPA 1: Builder
 FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21 AS build
-COPY --chown=quarkus:quarkus mvnw /code/mvnw
-COPY --chown=quarkus:quarkus .mvn /code/.mvn
-RUN sed -i 's/\r$//' /code/mvnw
-RUN chmod +x /code/mvnw
-COPY --chown=quarkus:quarkus pom.xml /code/
+
+USER root
+
+# 1. Instalamos herramientas básicas (tar y gzip) para descomprimir
+#    Y borramos cualquier maven viejo si existiera
+RUN microdnf install -y tar gzip wget \
+    && microdnf clean all
+
+# 2. Instalamos manualmente Maven 3.9.9 (Compatible con Quarkus 3.x)
+#    Esto garantiza que funcione siempre, sin importar qué traiga la imagen base
+ENV MAVEN_VERSION=3.9.9
+RUN wget https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    && tar -xzf apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /usr/share \
+    && mv /usr/share/apache-maven-${MAVEN_VERSION} /usr/share/maven \
+    && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn \
+    && rm apache-maven-${MAVEN_VERSION}-bin.tar.gz
+
+# 3. Volvemos al usuario quarkus
 USER quarkus
 WORKDIR /code
-# Descargar dependencias primero (para cachear capas)
-RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
-COPY src /code/src
-# Compilar a nativo
-RUN ./mvnw package -Pnative
 
-# ETAPA 2: Runtime (Imagen final ligera)
-# 'quarkus-micro-image' es una imagen base mínima (similar a distroless) optimizada para Quarkus
+# 4. Descarga de dependencias (Go Offline)
+COPY --chown=quarkus:quarkus pom.xml /code/
+RUN mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+
+# 5. Compilación Nativa
+COPY src /code/src
+RUN mvn package -Pnative
+
+# ETAPA 2: Runtime (Igual que siempre)
 FROM quay.io/quarkus/quarkus-micro-image:2.0
 WORKDIR /work/
 COPY --from=build /code/target/*-runner /work/application
 
-# Permisos y ejecución
 RUN chmod 775 /work
 EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

@@ -1,13 +1,10 @@
-package com.pe.demo.quarkus.cross;
+package com.pe.demo.quarkus.infrastructure.util;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Tags;
-import io.quarkus.logging.Log;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.atomic.AtomicReference;

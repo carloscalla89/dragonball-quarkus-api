@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dragonball-quarkus-api-native
+  name: ${APP_NAME}
   labels:
-    app: dragonball-quarkus-api-native
+    app: ${APP_NAME}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dragonball-quarkus-api-native
+      app: ${APP_NAME}
   template:
     metadata:
       labels:
-        app: dragonball-quarkus-api-native
+        app: ${APP_NAME}
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/q/metrics"
         prometheus.io/port: "8080"
     spec:
       containers:
-        - name: dragonball-quarkus-api-native
-          image: carlos89/dragonball-quarkus-api-native:latest # Asumiendo tag latest
+        - name: ${APP_NAME}
+          image: ${IMAGE_NAME}:${TAG} # Asumiendo tag latest
           # IMPORTANTE: IfNotPresent asegura que use la imagen cargada localmente
           # en lugar de intentar descargarla de internet (y fallar).
           imagePullPolicy: IfNotPresent
@@ -28,7 +28,7 @@ spec:
             - name: QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT
               value: "http://otel-collector-opentelemetry-collector.opentelemetry.svc.cluster.local:4317"
             - name: QUARKUS_APPLICATION_NAME
-              value: "dragonball-quarkus-api-native"
+              value: ${APP_NAME}
             #- name: QUARKUS_OTEL_EXPORTER_OTLP_ENABLED
             #  value: "true"
           ports:
@@ -57,12 +57,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dragonball-quarkus-api-native
+  name: ${APP_NAME}
   labels:
-    app: dragonball-quarkus-api-native
+    app: ${APP_NAME}
 spec:
   selector:
-    app: dragonball-quarkus-api-native
+    app: ${APP_NAME}
   type: NodePort
   ports:
     - name: http-api

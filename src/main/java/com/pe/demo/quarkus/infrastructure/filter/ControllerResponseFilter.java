@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.cross;
+package com.pe.demo.quarkus.infrastructure.filter;
 
 import io.opentelemetry.api.trace.Span;
 import jakarta.ws.rs.container.ContainerRequestContext;
