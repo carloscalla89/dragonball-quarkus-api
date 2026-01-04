@@ -1,4 +1,4 @@
-package com.pe.demo.quarkus.infrastructure.util;
+package com.pe.demo.quarkus.infrastructure.metric;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.quarkus.runtime.StartupEvent;

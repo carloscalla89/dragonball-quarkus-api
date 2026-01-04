@@ -15,11 +15,11 @@ import java.util.List;
 public class CharacterPanacheRepositoryImpl implements CharacterRepository {
 
     @Inject
-    CharacterPanacheRepository dbRepository;
+    CharacterPanacheRepository characterPanacheRepository;
 
     @Override
     public Character searchById(Long id) {
-        CharacterJpaEntity entidadDb = dbRepository.findById(id);
+        CharacterJpaEntity entidadDb = characterPanacheRepository.findById(id);
 
         if (entidadDb != null) {
             return Character.builder()
@@ -38,11 +38,6 @@ public class CharacterPanacheRepositoryImpl implements CharacterRepository {
     }
 
     @Override
-    public List<Character> getAll(int page, int limit) {
-        return null;
-    }
-
-    @Override
     @Transactional
     public void save(Character character) {
         CharacterJpaEntity entity = CharacterJpaEntity
@@ -56,7 +51,7 @@ public class CharacterPanacheRepositoryImpl implements CharacterRepository {
                 .affiliation(character.getAffiliation())
                 .build();
 
-        dbRepository.persist(entity);
+        characterPanacheRepository.persist(entity);
 
     }
 
@@ -64,9 +59,14 @@ public class CharacterPanacheRepositoryImpl implements CharacterRepository {
     @Override
     public boolean delete(String nombre) {
 
-        long eliminados = dbRepository.delete("name",nombre);
+        long eliminados = characterPanacheRepository.delete("name",nombre);
 
         return eliminados > 0;
+    }
+
+    @Override
+    public List<Character> getAll(int page, int limit) {
+        return null;
     }
 
     private int parsearKi(String kiRaw) {

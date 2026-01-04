@@ -18,7 +18,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-
 import java.net.URI;
 
 @Path("/api/v1/guerreros")
@@ -29,7 +28,7 @@ public class GuerreroController {
 
     private final CharacterService useCase;
 
-    // Inyección por constructor (Best Practice)
+    // Inyección por constructor
     @Inject
     public GuerreroController(CharacterService useCase) {
         this.useCase = useCase;
@@ -41,7 +40,8 @@ public class GuerreroController {
     @Timed(value = "timer_obtener_guerrero",
             description = "Tiempo que toma buscar un guerrero (incluye llamada externa)",
             histogram = true)
-    @Operation(summary = "Buscar guerrero por ID", description = "Consulta la API externa de Dragon Ball para obtener detalles.")
+    @Operation(summary = "Buscar guerrero por ID",
+            description = "Consulta la API externa de Dragon Ball para obtener detalles.")
     @APIResponse(responseCode = "200", description = "Guerrero encontrado",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = GuerreroResponse.class)))

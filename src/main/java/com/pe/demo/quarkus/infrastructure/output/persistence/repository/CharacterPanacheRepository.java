@@ -7,5 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class CharacterPanacheRepository implements PanacheRepository<CharacterJpaEntity> {
 
+    // Operaciones predefinidas: .persist(), .listAll(), .findById(id), .deleteById(id)
+    // Aqui se puede crear operaciones personalizables
 
 }
